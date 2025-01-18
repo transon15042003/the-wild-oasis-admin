@@ -5,31 +5,31 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 const FullPage = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 `;
 
 function ProtectedRoute({ children }) {
-  const { isPending, isAuthenticated } = useUser();
-  const navigate = useNavigate();
+    const { isPending, isAuthenticated } = useUser();
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isAuthenticated && !isPending) {
-      navigate("/login");
+    useEffect(() => {
+        if (!isAuthenticated && !isPending) {
+            navigate("/login");
+        }
+    }, [isAuthenticated, isPending, navigate]);
+
+    if (isPending) {
+        return (
+            <FullPage>
+                <Spinner />
+            </FullPage>
+        );
     }
-  }, [isAuthenticated, isPending, navigate]);
 
-  if (isPending) {
-    return (
-      <FullPage>
-        <Spinner />
-      </FullPage>
-    );
-  }
-
-  if (isAuthenticated) return children;
+    if (isAuthenticated) return children;
 }
 
 export default ProtectedRoute;

@@ -6,13 +6,13 @@ import GlobalStyles from "./styles/GlobalStyles.js";
 import ErrorFallback from "./ui/ErrorFallback.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <GlobalStyles />
-    <ErrorBoundary
-      FallbackComponent={ErrorFallback}
-      onReset={() => window.location.replace("/")}
-    >
-      <App />
-    </ErrorBoundary>
-  </React.StrictMode>
+    <React.StrictMode>
+        <GlobalStyles />
+        <ErrorBoundary
+            FallbackComponent={ErrorFallback}
+            onReset={() => window.location.replace("/")}
+        >
+            <App />
+        </ErrorBoundary>
+    </React.StrictMode>
 );

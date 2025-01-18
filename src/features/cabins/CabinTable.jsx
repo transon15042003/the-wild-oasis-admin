@@ -32,49 +32,49 @@ import Table from "../../ui/Table";
 // `;
 
 function CabinTable() {
-  const [searchParams] = useSearchParams();
-  const filterValue = searchParams.get("discount") || "all";
-  const sortValue = searchParams.get("sortBy") || "start_date-asc";
-  const [field, direction] = sortValue.split("-");
+    const [searchParams] = useSearchParams();
+    const filterValue = searchParams.get("discount") || "all";
+    const sortValue = searchParams.get("sortBy") || "start_date-asc";
+    const [field, direction] = sortValue.split("-");
 
-  const { isPending, cabins } = useCabins();
+    const { isPending, cabins } = useCabins();
 
-  // Filter cabins based on discount
-  let filteredCabins = cabins;
+    // Filter cabins based on discount
+    let filteredCabins = cabins;
 
-  if (filterValue === "no-discount") {
-    filteredCabins = cabins?.filter((cabin) => cabin.discount === 0);
-  } else if (filterValue === "with-discount") {
-    filteredCabins = cabins?.filter((cabin) => cabin.discount > 0);
-  }
+    if (filterValue === "no-discount") {
+        filteredCabins = cabins?.filter((cabin) => cabin.discount === 0);
+    } else if (filterValue === "with-discount") {
+        filteredCabins = cabins?.filter((cabin) => cabin.discount > 0);
+    }
 
-  // Sort cabins
-  let sortedCabins = filteredCabins?.sort((a, b) => a[field] - b[field]);
-  if (direction === "desc") {
-    sortedCabins = sortedCabins?.reverse();
-  }
+    // Sort cabins
+    let sortedCabins = filteredCabins?.sort((a, b) => a[field] - b[field]);
+    if (direction === "desc") {
+        sortedCabins = sortedCabins?.reverse();
+    }
 
-  if (isPending) return <Spinner />;
+    if (isPending) return <Spinner />;
 
-  return (
-    // <Menus>
-    <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 2fr">
-      <Table.Header>
-        <div role="columnheader"></div>
-        <div role="columnheader">Cabin</div>
-        <div role="columnheader">Capacity</div>
-        <div role="columnheader">Price</div>
-        <div role="columnheader">Discount</div>
-        <div role="columnheader"></div>
-      </Table.Header>
+    return (
+        // <Menus>
+        <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 2fr">
+            <Table.Header>
+                <div role="columnheader"></div>
+                <div role="columnheader">Cabin</div>
+                <div role="columnheader">Capacity</div>
+                <div role="columnheader">Price</div>
+                <div role="columnheader">Discount</div>
+                <div role="columnheader"></div>
+            </Table.Header>
 
-      <Table.Body
-        data={sortedCabins}
-        render={(cabin) => <CabinRow key={cabin.id} cabin={cabin} />}
-      />
-    </Table>
-    // </Menus>
-  );
+            <Table.Body
+                data={sortedCabins}
+                render={(cabin) => <CabinRow key={cabin.id} cabin={cabin} />}
+            />
+        </Table>
+        // </Menus>
+    );
 }
 
 export default CabinTable;
