@@ -2,7 +2,9 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
+import styled from "styled-components";
+import Spinner from "./ui/Spinner";
 
 import Checkin from "./ui/Checkin";
 import AppLayout from "./ui/AppLayout";
@@ -19,15 +21,12 @@ const NewUsers = lazy(() => import("./pages/Users"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 const Booking = lazy(() => import("./pages/Booking"));
 
-// import Dashboard from "./pages/Dashboard";
-// import Account from "./pages/Account";
-// import Bookings from "./pages/Bookings";
-// import Cabins from "./pages/Cabins";
-// import Login from "./pages/Login";
-// import Settings from "./pages/Settings";
-// import NewUsers from "./pages/Users";
-// import PageNotFound from "./pages/PageNotFound";
-// import Booking from "./pages/Booking";
+const FullPage = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+`;
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -45,37 +44,56 @@ function App() {
                 <ReactQueryDevtools initialIsOpen={false} />
 
                 <BrowserRouter>
-                    <Routes>
-                        <Route
-                            element={
-                                <ProtectedRoute>
-                                    <AppLayout />
-                                </ProtectedRoute>
-                            }
-                        >
+                    <Suspense
+                        fallback={
+                            <FullPage>
+                                <Spinner />
+                            </FullPage>
+                        }
+                    >
+                        <Routes>
                             <Route
-                                index
-                                element={<Navigate replace to="/dashboard" />}
-                            />
-                            <Route path="/dashboard" element={<Dashboard />} />
-                            <Route path="/account" element={<Account />} />
-                            <Route path="/bookings" element={<Bookings />} />
-                            <Route
-                                path="/bookings/:bookingId"
-                                element={<Booking />}
-                            />
-                            <Route
-                                path="/checkin/:bookingId"
-                                element={<Checkin />}
-                            />
-                            <Route path="/cabins" element={<Cabins />} />
-                            <Route path="/settings" element={<Settings />} />
-                            <Route path="/users" element={<NewUsers />} />
-                        </Route>
+                                element={
+                                    <ProtectedRoute>
+                                        <AppLayout />
+                                    </ProtectedRoute>
+                                }
+                            >
+                                <Route
+                                    index
+                                    element={
+                                        <Navigate replace to="/dashboard" />
+                                    }
+                                />
+                                <Route
+                                    path="/dashboard"
+                                    element={<Dashboard />}
+                                />
+                                <Route path="/account" element={<Account />} />
+                                <Route
+                                    path="/bookings"
+                                    element={<Bookings />}
+                                />
+                                <Route
+                                    path="/bookings/:bookingId"
+                                    element={<Booking />}
+                                />
+                                <Route
+                                    path="/checkin/:bookingId"
+                                    element={<Checkin />}
+                                />
+                                <Route path="/cabins" element={<Cabins />} />
+                                <Route
+                                    path="/settings"
+                                    element={<Settings />}
+                                />
+                                <Route path="/users" element={<NewUsers />} />
+                            </Route>
 
-                        <Route path="/login" element={<Login />} />
-                        <Route path="*" element={<PageNotFound />} />
-                    </Routes>
+                            <Route path="/login" element={<Login />} />
+                            <Route path="*" element={<PageNotFound />} />
+                        </Routes>
+                    </Suspense>
                     <Toaster
                         position="top-center"
                         reverseOrder={false}

@@ -13,7 +13,6 @@ function useLogin() {
     } = useMutation({
         mutationFn: LoginApi,
         onSuccess: (data) => {
-            // console.log(data);
             queryClient.setQueryData(["user"], data.user);
             navigate("/dashboard", { replace: true });
         },

@@ -1,8 +1,10 @@
+import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import Spinner from "./Spinner";
 
 const StyledAppLayout = styled.div`
     display: grid;
@@ -25,6 +27,13 @@ const Container = styled.div`
     gap: 3.2rem;
 `;
 
+const ContentFallback = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40rem;
+`;
+
 function AppLayout() {
     return (
         <StyledAppLayout>
@@ -32,7 +41,15 @@ function AppLayout() {
             <Sidebar />
             <Main>
                 <Container>
-                    <Outlet />
+                    <Suspense
+                        fallback={
+                            <ContentFallback>
+                                <Spinner />
+                            </ContentFallback>
+                        }
+                    >
+                        <Outlet />
+                    </Suspense>
                 </Container>
             </Main>
         </StyledAppLayout>
