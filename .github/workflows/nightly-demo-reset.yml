@@ -1,0 +1,38 @@
+name: Nightly Demo Reset
+
+on:
+  schedule:
+    # 00:00 UTC daily — starts scheduled Demo Reset + 30m Maintenance Window
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  reset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger reset-demo (scheduled)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          RESET_CRON_SECRET: ${{ secrets.RESET_CRON_SECRET }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$RESET_CRON_SECRET" ]; then
+            echo "Missing SUPABASE_URL or RESET_CRON_SECRET"
+            exit 1
+          fi
+
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "${SUPABASE_URL}/functions/v1/reset-demo" \
+            -H "Content-Type: application/json" \
+            -H "x-reset-cron-secret: ${RESET_CRON_SECRET}" \
+            -d '{"mode":"scheduled"}')
+
+          body=$(echo "$response" | head -n -1)
+          status=$(echo "$response" | tail -n 1)
+
+          echo "HTTP status: $status"
+          echo "Body: $body"
+
+          if [ "$status" != "200" ]; then
+            echo "Nightly demo reset failed"
+            exit 1
+          fi
