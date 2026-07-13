@@ -10,6 +10,7 @@ import Checkin from "./ui/Checkin";
 import AppLayout from "./ui/AppLayout";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import { DarkModeProvider } from "./context/DarkModeContext";
+import MaintenanceScreen from "./features/demo/MaintenanceScreen";
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Account = lazy(() => import("./pages/Account"));
@@ -17,7 +18,6 @@ const Bookings = lazy(() => import("./pages/Bookings"));
 const Cabins = lazy(() => import("./pages/Cabins"));
 const Login = lazy(() => import("./pages/Login"));
 const Settings = lazy(() => import("./pages/Settings"));
-const NewUsers = lazy(() => import("./pages/Users"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 const Booking = lazy(() => import("./pages/Booking"));
 
@@ -51,48 +51,55 @@ function App() {
                             </FullPage>
                         }
                     >
-                        <Routes>
-                            <Route
-                                element={
-                                    <ProtectedRoute>
-                                        <AppLayout />
-                                    </ProtectedRoute>
-                                }
-                            >
+                        <MaintenanceScreen>
+                            <Routes>
                                 <Route
-                                    index
                                     element={
-                                        <Navigate replace to="/dashboard" />
+                                        <ProtectedRoute>
+                                            <AppLayout />
+                                        </ProtectedRoute>
                                     }
-                                />
-                                <Route
-                                    path="/dashboard"
-                                    element={<Dashboard />}
-                                />
-                                <Route path="/account" element={<Account />} />
-                                <Route
-                                    path="/bookings"
-                                    element={<Bookings />}
-                                />
-                                <Route
-                                    path="/bookings/:bookingId"
-                                    element={<Booking />}
-                                />
-                                <Route
-                                    path="/checkin/:bookingId"
-                                    element={<Checkin />}
-                                />
-                                <Route path="/cabins" element={<Cabins />} />
-                                <Route
-                                    path="/settings"
-                                    element={<Settings />}
-                                />
-                                <Route path="/users" element={<NewUsers />} />
-                            </Route>
+                                >
+                                    <Route
+                                        index
+                                        element={
+                                            <Navigate replace to="/dashboard" />
+                                        }
+                                    />
+                                    <Route
+                                        path="/dashboard"
+                                        element={<Dashboard />}
+                                    />
+                                    <Route
+                                        path="/account"
+                                        element={<Account />}
+                                    />
+                                    <Route
+                                        path="/bookings"
+                                        element={<Bookings />}
+                                    />
+                                    <Route
+                                        path="/bookings/:bookingId"
+                                        element={<Booking />}
+                                    />
+                                    <Route
+                                        path="/checkin/:bookingId"
+                                        element={<Checkin />}
+                                    />
+                                    <Route
+                                        path="/cabins"
+                                        element={<Cabins />}
+                                    />
+                                    <Route
+                                        path="/settings"
+                                        element={<Settings />}
+                                    />
+                                </Route>
 
-                            <Route path="/login" element={<Login />} />
-                            <Route path="*" element={<PageNotFound />} />
-                        </Routes>
+                                <Route path="/login" element={<Login />} />
+                                <Route path="*" element={<PageNotFound />} />
+                            </Routes>
+                        </MaintenanceScreen>
                     </Suspense>
                     <Toaster
                         position="top-center"

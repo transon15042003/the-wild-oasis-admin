@@ -1,14 +1,18 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
+/* eslint-disable react/prop-types */
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
+import FormRowVertical from "../../ui/FormRowVertical";
 import Input from "../../ui/Input";
 import useSignup from "./useSignup";
 import SpinnerMini from "../../ui/SpinnerMini";
+import TurnstileWidget from "../demo/TurnstileWidget";
 
-// Email regex: /\S+@\S+\.\S+/
-
-function SignupForm() {
+function SignupForm({ variant = "admin" }) {
+    const isPublic = variant === "public";
+    const Row = isPublic ? FormRowVertical : FormRow;
     const {
         register,
         handleSubmit,
@@ -17,36 +21,48 @@ function SignupForm() {
         reset,
     } = useForm();
     const { signup, isPending } = useSignup();
+    const [turnstileToken, setTurnstileToken] = useState("");
 
     function onSubmit({ fullName, email, password }) {
+        if (isPublic && !turnstileToken) return;
+
         signup(
-            { fullName, email, password },
+            {
+                fullName,
+                email,
+                password,
+                turnstileToken: isPublic ? turnstileToken : undefined,
+            },
             {
                 onSuccess: () => {
                     reset();
+                    setTurnstileToken("");
                 },
             }
         );
     }
 
+    const disabled = isSubmitting || isPending;
+
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}>
-            <FormRow label="Full name" error={errors?.fullName?.message}>
+        <Form onSubmit={handleSubmit(onSubmit)} type={isPublic ? "regular" : undefined}>
+            <Row label="Full name" error={errors?.fullName?.message}>
                 <Input
                     type="text"
                     id="fullName"
-                    disabled={isSubmitting || isPending}
+                    disabled={disabled}
                     {...register("fullName", {
                         required: "This field is required",
                     })}
                 />
-            </FormRow>
+            </Row>
 
-            <FormRow label="Email address" error={errors?.email?.message}>
+            <Row label="Email address" error={errors?.email?.message}>
                 <Input
                     type="email"
                     id="email"
-                    disabled={isSubmitting || isPending}
+                    autoComplete="username"
+                    disabled={disabled}
                     {...register("email", {
                         required: "This field is required",
                         pattern: {
@@ -55,16 +71,17 @@ function SignupForm() {
                         },
                     })}
                 />
-            </FormRow>
+            </Row>
 
-            <FormRow
+            <Row
                 label="Password (min 8 characters)"
                 error={errors?.password?.message}
             >
                 <Input
                     type="password"
                     id="password"
-                    disabled={isSubmitting || isPending}
+                    autoComplete="new-password"
+                    disabled={disabled}
                     {...register("password", {
                         required: "This field is required",
                         minLength: {
@@ -74,16 +91,17 @@ function SignupForm() {
                         },
                     })}
                 />
-            </FormRow>
+            </Row>
 
-            <FormRow
+            <Row
                 label="Repeat password"
                 error={errors?.passwordConfirm?.message}
             >
                 <Input
                     type="password"
                     id="passwordConfirm"
-                    disabled={isSubmitting || isPending}
+                    autoComplete="new-password"
+                    disabled={disabled}
                     {...register("passwordConfirm", {
                         required: "This field is required",
                         validate: (value) =>
@@ -91,26 +109,41 @@ function SignupForm() {
                             "Passwords do not match",
                     })}
                 />
-            </FormRow>
+            </Row>
 
-            <FormRow>
-                {/* type is an HTML attribute! */}
+            {isPublic && (
+                <Row>
+                    <TurnstileWidget
+                        onSuccess={setTurnstileToken}
+                        onExpire={() => setTurnstileToken("")}
+                    />
+                </Row>
+            )}
+
+            <Row>
+                {!isPublic && (
+                    <Button
+                        variation="secondary"
+                        type="reset"
+                        disabled={disabled}
+                        onClick={reset}
+                    >
+                        Reset
+                    </Button>
+                )}
                 <Button
-                    variation="secondary"
-                    type="reset"
-                    disabled={isSubmitting || isPending}
-                    onClick={reset}
+                    size={isPublic ? "large" : "medium"}
+                    disabled={disabled || (isPublic && !turnstileToken)}
                 >
-                    Reset
-                </Button>
-                <Button disabled={isSubmitting || isPending}>
-                    {isSubmitting || isPending ? (
+                    {disabled ? (
                         <SpinnerMini />
+                    ) : isPublic ? (
+                        "Create account"
                     ) : (
                         "Create new user"
                     )}
                 </Button>
-            </FormRow>
+            </Row>
         </Form>
     );
 }

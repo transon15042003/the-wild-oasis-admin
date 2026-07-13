@@ -37,7 +37,30 @@ export async function logout() {
     }
 }
 
-export async function signup({ fullName, email, password }) {
+export async function signup({ fullName, email, password, turnstileToken }) {
+    const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
+
+    if (siteKey && turnstileToken) {
+        const { data: fnData, error: fnError } =
+            await supabase.functions.invoke("signup-demo", {
+                body: { fullName, email, password, turnstileToken },
+            });
+
+        if (fnError) {
+            throw new Error(fnError.message || "Signup failed");
+        }
+        if (fnData?.error) {
+            throw new Error(fnData.error);
+        }
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+        if (error) throw error;
+        return data;
+    }
+
     let { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -68,7 +91,6 @@ export async function UpdateCurrentUser({ fullName, avatar, password }) {
 
     if (!avatar) return data;
 
-    // Upload avatar to storage
     const avatarName = `avatar-${data.user.id}-${Math.random()}`;
     const { error: uploadError } = await supabase.storage
         .from("user_avatars")
@@ -77,7 +99,6 @@ export async function UpdateCurrentUser({ fullName, avatar, password }) {
         throw uploadError;
     }
 
-    // Update user with avatar URL
     const { data: updateData, error: updateError } =
         await supabase.auth.updateUser({
             data: {
