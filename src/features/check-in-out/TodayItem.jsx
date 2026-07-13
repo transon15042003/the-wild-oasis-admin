@@ -4,6 +4,7 @@ import { Flag } from "../../ui/Flag";
 import Button from "../../ui/Button";
 import { Link } from "react-router-dom";
 import CheckoutButton from "./CheckoutButton";
+import { media } from "../../styles/breakpoints";
 
 const StyledTodayItem = styled.li`
   display: grid;
@@ -17,6 +18,12 @@ const StyledTodayItem = styled.li`
 
   &:first-child {
     border-top: 1px solid var(--color-grey-100);
+  }
+
+  ${media.max("tablet")} {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.2rem;
   }
 `;
 

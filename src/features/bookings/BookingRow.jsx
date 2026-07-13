@@ -79,24 +79,28 @@ function BookingRow({
                     <span>{email}</span>
                 </Stacked>
 
-                <Stacked>
-                    <span>
-                        {isToday(new Date(start_date))
-                            ? "Today"
-                            : formatDistanceFromNow(start_date)}
-                        &rarr; {num_nights} night stay
-                    </span>
-                    <span>
-                        {format(new Date(start_date), "MMM dd yyyy")} &mdash;{" "}
-                        {format(new Date(end_date), "MMM dd yyyy")}
-                    </span>
-                </Stacked>
+                <Table.Cell $hideOnTablet>
+                    <Stacked>
+                        <span>
+                            {isToday(new Date(start_date))
+                                ? "Today"
+                                : formatDistanceFromNow(start_date)}
+                            &rarr; {num_nights} night stay
+                        </span>
+                        <span>
+                            {format(new Date(start_date), "MMM dd yyyy")}{" "}
+                            &mdash; {format(new Date(end_date), "MMM dd yyyy")}
+                        </span>
+                    </Stacked>
+                </Table.Cell>
 
                 <Tag type={statusToTagName[status]}>
                     {status.replace("-", " ")}
                 </Tag>
 
-                <Amount>{formatCurrency(total_price)}</Amount>
+                <Table.Cell $hideOnTablet>
+                    <Amount>{formatCurrency(total_price)}</Amount>
+                </Table.Cell>
 
                 <Menus.Menu>
                     <Menus.Toggle id={bookingId} />

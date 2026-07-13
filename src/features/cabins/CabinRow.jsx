@@ -74,7 +74,9 @@ function CabinRow({ cabin }) {
 
     return (
         <Table.Row role="row">
-            <Img src={image} alt={`Cabin ${name}`} />
+            <Table.Cell $hideOnTablet>
+                <Img src={image} alt={`Cabin ${name}`} />
+            </Table.Cell>
 
             <Cabin>{name}</Cabin>
 
@@ -82,11 +84,13 @@ function CabinRow({ cabin }) {
 
             <Price>{formatCurrency(regularPrice)}</Price>
 
-            {discount ? (
-                <Discount>{formatCurrency(discount)}</Discount>
-            ) : (
-                <span>&mdash;</span>
-            )}
+            <Table.Cell $hideOnTablet>
+                {discount ? (
+                    <Discount>{formatCurrency(discount)}</Discount>
+                ) : (
+                    <span>&mdash;</span>
+                )}
+            </Table.Cell>
 
             <div>
                 <Modal>

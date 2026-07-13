@@ -5,6 +5,7 @@ import Row from "../../ui/Row";
 import useTodayActivity from "./useTodayActivity";
 import Spinner from "../../ui/Spinner";
 import TodayItem from "./TodayItem";
+import { media } from "../../styles/breakpoints";
 
 const StyledToday = styled.div`
   /* Box */
@@ -18,6 +19,18 @@ const StyledToday = styled.div`
   gap: 2.4rem;
   grid-column: 1 / span 2;
   padding-top: 2.4rem;
+  min-height: 0;
+
+  ${media.max("desktop")} {
+    grid-column: 1 / 2;
+    min-height: 34rem;
+  }
+
+  ${media.max("tablet")} {
+    grid-column: 1 / -1;
+    min-height: 0;
+    padding: 2.4rem 1.6rem;
+  }
 `;
 
 const TodayList = styled.ul`

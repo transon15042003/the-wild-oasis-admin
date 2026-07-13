@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from "recharts";
 import { useDarkMode } from "../../context/DarkModeContext";
+import { media } from "../../styles/breakpoints";
 
 const ChartBox = styled.div`
   /* Box */
@@ -25,6 +26,17 @@ const ChartBox = styled.div`
 
   & .recharts-pie-label-text {
     font-weight: 600;
+  }
+
+  ${media.max("desktop")} {
+    grid-column: 2 / 3;
+    min-height: 34rem;
+  }
+
+  ${media.max("tablet")} {
+    grid-column: 1 / -1;
+    min-height: 0;
+    padding: 2.4rem 1.6rem;
   }
 `;
 

@@ -58,13 +58,18 @@ function CabinTable() {
 
     return (
         // <Menus>
-        <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 2fr">
+        <Table
+            columns="0.6fr 1.8fr 2.2fr 1fr 1fr 2fr"
+            columnsTablet="1.6fr 1.4fr 1fr 2fr"
+        >
             <Table.Header>
-                <div role="columnheader"></div>
+                <Table.Cell $hideOnTablet role="columnheader"></Table.Cell>
                 <div role="columnheader">Cabin</div>
                 <div role="columnheader">Capacity</div>
                 <div role="columnheader">Price</div>
-                <div role="columnheader">Discount</div>
+                <Table.Cell $hideOnTablet role="columnheader">
+                    Discount
+                </Table.Cell>
                 <div role="columnheader"></div>
             </Table.Header>
 

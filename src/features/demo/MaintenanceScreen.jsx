@@ -17,6 +17,7 @@ const FullPage = styled.div`
 
     & p {
         max-width: 48rem;
+        width: 100%;
         color: var(--color-grey-600);
         font-size: 1.6rem;
     }

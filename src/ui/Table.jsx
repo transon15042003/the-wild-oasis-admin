@@ -1,22 +1,36 @@
 import { createContext, useContext } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { media } from "../styles/breakpoints";
+
+const TableScroll = styled.div`
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-grey-200);
+  border-radius: 7px;
+  background-color: var(--color-grey-0);
+`;
 
 const StyledTable = styled.div`
   width: 100%;
-  border: 1px solid var(--color-grey-200);
-
+  min-width: max-content;
   font-size: 1.4rem;
   background-color: var(--color-grey-0);
-  border-radius: 7px;
-  overflow: hidden;
 `;
 
 const CommonRow = styled.div`
   display: grid;
-  grid-template-columns: ${(props) => props.columns};
+  grid-template-columns: ${(props) => props.$columns};
   column-gap: 2.4rem;
   align-items: center;
   transition: none;
+
+  ${(props) =>
+    props.$columnsTablet &&
+    css`
+      ${media.max("tablet")} {
+        grid-template-columns: ${props.$columnsTablet};
+      }
+    `}
 `;
 
 const StyledHeader = styled(CommonRow)`
@@ -61,29 +75,46 @@ const Empty = styled.p`
   margin: 2.4rem;
 `;
 
+const Cell = styled.div`
+  ${(props) =>
+    props.$hideOnTablet &&
+    css`
+      ${media.max("tablet")} {
+        display: none;
+      }
+    `}
+`;
+
 const TableContext = createContext();
 
-function Table({ children, columns }) {
+function Table({ children, columns, columnsTablet }) {
   return (
-    <TableContext.Provider value={{ columns }}>
-      <StyledTable role="table">{children}</StyledTable>
+    <TableContext.Provider value={{ columns, columnsTablet }}>
+      <TableScroll>
+        <StyledTable role="table">{children}</StyledTable>
+      </TableScroll>
     </TableContext.Provider>
   );
 }
 
 function Header({ children }) {
-  const { columns } = useContext(TableContext);
+  const { columns, columnsTablet } = useContext(TableContext);
   return (
-    <StyledHeader as="header" role="row" columns={columns}>
+    <StyledHeader
+      as="header"
+      role="row"
+      $columns={columns}
+      $columnsTablet={columnsTablet}
+    >
       {children}
     </StyledHeader>
   );
 }
 
 function Row({ children }) {
-  const { columns } = useContext(TableContext);
+  const { columns, columnsTablet } = useContext(TableContext);
   return (
-    <StyledRow role="row" columns={columns}>
+    <StyledRow role="row" $columns={columns} $columnsTablet={columnsTablet}>
       {children}
     </StyledRow>
   );
@@ -106,5 +137,6 @@ Table.Header = Header;
 Table.Body = Body;
 Table.Row = Row;
 Table.Footer = Footer;
+Table.Cell = Cell;
 
 export default Table;

@@ -10,12 +10,14 @@ import DemoStatusBanner from "../features/demo/DemoStatusBanner";
 const LoginLayout = styled.main`
     min-height: 100vh;
     display: grid;
-    grid-template-columns: 48rem;
+    grid-template-columns: minmax(0, 48rem);
+    width: 100%;
     align-content: center;
     justify-content: center;
     gap: 3.2rem;
     background-color: var(--color-grey-50);
     padding: 2.4rem;
+    box-sizing: border-box;
 `;
 
 const SwitchRow = styled.div`

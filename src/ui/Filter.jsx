@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import { useSearchParams } from "react-router-dom";
+import { media } from "../styles/breakpoints";
 
 const StyledFilter = styled.div`
   border: 1px solid var(--color-grey-100);
@@ -8,9 +9,13 @@ const StyledFilter = styled.div`
   border-radius: var(--border-radius-sm);
   padding: 0.4rem;
   display: flex;
+  flex-wrap: wrap;
   gap: 0.4rem;
-`;
 
+  ${media.max("tablet")} {
+    width: 100%;
+  }
+`;
 const FilterButton = styled.button`
   background-color: var(--color-grey-0);
   border: none;
