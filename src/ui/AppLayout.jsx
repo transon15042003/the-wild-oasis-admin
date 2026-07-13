@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import Spinner from "./Spinner";
+import DemoStatusBanner from "../features/demo/DemoStatusBanner";
 
 const StyledAppLayout = styled.div`
     display: grid;
@@ -41,6 +42,7 @@ function AppLayout() {
             <Sidebar />
             <Main>
                 <Container>
+                    <DemoStatusBanner />
                     <Suspense
                         fallback={
                             <ContentFallback>
