@@ -15,6 +15,11 @@ dist-ssr
 .env.*
 !.env.example
 
+# Local MCP / deploy scratch
+supabase/functions/.mcp-*.json
+supabase/functions/.deploy-*.json
+supabase/migrations/.query-only.sql
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
