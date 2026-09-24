@@ -1,6 +1,6 @@
 # The Wild Oasis Admin
 
-Public portfolio Demo Sandbox of a boutique-hotel admin console. Visitors become Demo Operators, share one hotel dataset, and accept periodic Demo Resets.
+Public portfolio Demo Sandbox of a boutique-hotel admin console. People enter via Try Demo as Demo Operators, share one hotel dataset, and accept periodic Demo Resets.
 
 Glossary only — no deployment or implementation detail. Ops and architecture live under [docs/](docs/README.md).
 
@@ -9,8 +9,8 @@ Glossary only — no deployment or implementation detail. Ops and architecture l
 ### People
 
 **Demo Operator**:
-A person who registers and signs in to operate the admin Demo Sandbox.
-_Avoid_: Guest, visitor, admin user, account, user (alone)
+A person who enters via Try Demo and operates the admin Demo Sandbox through the shared demo session—not a self-registered Auth account.
+_Avoid_: Guest, visitor, admin user, account, user (alone), Sign up
 
 **Hotel Guest**:
 A person staying at the resort; a row in hotel guest records, not a Demo Operator.

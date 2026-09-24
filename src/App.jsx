@@ -9,6 +9,7 @@ import Spinner from "./ui/Spinner";
 import Checkin from "./ui/Checkin";
 import AppLayout from "./ui/AppLayout";
 import ProtectedRoute from "./ui/ProtectedRoute";
+import { AbilityProvider } from "./features/casl/AbilityContext";
 import { DarkModeProvider } from "./context/DarkModeContext";
 import MaintenanceScreen from "./features/demo/MaintenanceScreen";
 
@@ -56,7 +57,9 @@ function App() {
                                 <Route
                                     element={
                                         <ProtectedRoute>
-                                            <AppLayout />
+                                            <AbilityProvider>
+                                                <AppLayout />
+                                            </AbilityProvider>
                                         </ProtectedRoute>
                                     }
                                 >

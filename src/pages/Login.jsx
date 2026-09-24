@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import LoginForm from "../features/authentication/LoginForm";
-import SignupForm from "../features/authentication/SignupForm";
+import useTryDemo from "../features/authentication/useTryDemo";
 import Logo from "../ui/Logo";
 import Heading from "../ui/Heading";
 import Button from "../ui/Button";
+import SpinnerMini from "../ui/SpinnerMini";
 import DemoStatusBanner from "../features/demo/DemoStatusBanner";
 
 const LoginLayout = styled.main`
@@ -20,42 +22,52 @@ const LoginLayout = styled.main`
     box-sizing: border-box;
 `;
 
-const SwitchRow = styled.div`
-    display: flex;
-    justify-content: center;
-    gap: 0.8rem;
-    align-items: center;
-    font-size: 1.4rem;
+const Intro = styled.div`
+    display: grid;
+    gap: 1.2rem;
+    text-align: center;
+`;
+
+const Copy = styled.p`
+    font-size: 1.6rem;
+    line-height: 1.6;
     color: var(--color-grey-600);
 `;
 
+const DemoButton = styled(Button)`
+    justify-self: center;
+`;
+
 function Login() {
-    const [mode, setMode] = useState("login");
-    const isLogin = mode === "login";
+    const [searchParams] = useSearchParams();
+    const [logoClicks, setLogoClicks] = useState(0);
+    const { tryDemo, isPending } = useTryDemo();
+    const showOwner = searchParams.get("owner") === "1" || logoClicks >= 5;
 
     return (
         <LoginLayout>
-            <Logo />
+            <Logo
+                onClick={() =>
+                    setLogoClicks((clicks) => Math.min(clicks + 1, 5))
+                }
+            />
             <DemoStatusBanner />
-            <Heading as="h4">
-                {isLogin ? "Log in to your account" : "Create a demo account"}
-            </Heading>
-            {isLogin ? <LoginForm /> : <SignupForm variant="public" />}
-            <SwitchRow>
-                <span>
-                    {isLogin
-                        ? "New here?"
-                        : "Already have an account?"}
-                </span>
-                <Button
-                    variation="secondary"
-                    size="small"
+            <Intro>
+                <Heading as="h4">Try the Demo Sandbox</Heading>
+                <Copy>
+                    Explore shared demo data in a temporary account. The
+                    sandbox resets nightly.
+                </Copy>
+                <DemoButton
+                    size="large"
                     type="button"
-                    onClick={() => setMode(isLogin ? "signup" : "login")}
+                    disabled={isPending}
+                    onClick={() => tryDemo()}
                 >
-                    {isLogin ? "Sign up" : "Log in"}
-                </Button>
-            </SwitchRow>
+                    {isPending ? <SpinnerMini /> : "Try Demo"}
+                </DemoButton>
+            </Intro>
+            {showOwner && <LoginForm />}
         </LoginLayout>
     );
 }

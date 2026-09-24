@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Heading from "../../ui/Heading";
 import Button from "../../ui/Button";
 import SpinnerMini from "../../ui/SpinnerMini";
+import { Can } from "../casl/AbilityContext";
 import { useDemoMeta } from "./useDemoMeta";
 import { useDemoReset } from "./useDemoReset";
 
@@ -33,22 +34,24 @@ function DemoResetPanel() {
     }
 
     return (
-        <Box>
-            <Heading as="h2">Demo Reset</Heading>
-            <p>
-                Restore the shared Demo Sandbox to seed data. This affects all
-                Demo Operators. You can do this once per 24 hours.
-            </p>
-            <div>
-                <Button
-                    variation="danger"
-                    onClick={handleReset}
-                    disabled={isPending || isMaintenance}
-                >
-                    {isPending ? <SpinnerMini /> : "Reset demo data"}
-                </Button>
-            </div>
-        </Box>
+        <Can I="reset" a="DemoSandbox">
+            <Box>
+                <Heading as="h2">Demo Reset</Heading>
+                <p>
+                    Restore the shared Demo Sandbox to seed data. This affects all
+                    Demo Operators. You can do this once per 24 hours.
+                </p>
+                <div>
+                    <Button
+                        variation="danger"
+                        onClick={handleReset}
+                        disabled={isPending || isMaintenance}
+                    >
+                        {isPending ? <SpinnerMini /> : "Reset demo data"}
+                    </Button>
+                </div>
+            </Box>
+        </Can>
     );
 }
 

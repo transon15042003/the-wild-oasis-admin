@@ -13,6 +13,34 @@ export async function Login({ email, password }) {
     return data;
 }
 
+export async function tryDemo() {
+    const { data, error } = await supabase.functions.invoke("try-demo", {
+        body: {},
+    });
+
+    if (error) {
+        throw new Error(error.message || "Try Demo failed");
+    }
+    if (data?.error) {
+        throw new Error(data.error);
+    }
+    if (!data?.access_token || !data?.refresh_token) {
+        throw new Error("Try Demo returned no session");
+    }
+
+    const { data: sessionData, error: sessionError } =
+        await supabase.auth.setSession({
+            access_token: data.access_token,
+            refresh_token: data.refresh_token,
+        });
+
+    if (sessionError) {
+        throw new Error(sessionError.message);
+    }
+
+    return sessionData;
+}
+
 export async function getCurrentUser() {
     const { data: session } = await supabase.auth.getSession();
 
