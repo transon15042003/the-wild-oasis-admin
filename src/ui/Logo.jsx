@@ -3,6 +3,7 @@ import { useDarkMode } from "../context/DarkModeContext";
 
 const StyledLogo = styled.div`
   text-align: center;
+  cursor: ${(props) => (props.$clickable ? "pointer" : "default")};
 `;
 
 const Img = styled.img`
@@ -10,12 +11,12 @@ const Img = styled.img`
   width: auto;
 `;
 
-function Logo() {
+function Logo({ onClick }) { // eslint-disable-line react/prop-types
   const { isDarkMode } = useDarkMode();
   const src = isDarkMode ? "/img/logo-dark.png" : "/img/logo-light.png";
   return (
-    <StyledLogo>
-      <Img src={src} />
+    <StyledLogo onClick={onClick} $clickable={Boolean(onClick)}>
+      <Img src={src} alt="The Wild Oasis" />
     </StyledLogo>
   );
 }

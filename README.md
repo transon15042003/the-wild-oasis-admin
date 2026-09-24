@@ -1,21 +1,23 @@
 # The Wild Oasis (Admin)
 
-Vite + React admin console for a fictional boutique hotel, published as a **Demo Sandbox**: anyone can sign up, try the full UI, and share one dataset that resets on a schedule.
+Vite + React admin console for a fictional boutique hotel, published as a **Demo Sandbox**: visitors use **Try Demo**, share one **Hotel Data** set, and accept periodic **Demo Resets**.
 
 | | |
 |---|---|
 | **Live app** | [the-wild-oasis-admin-transon.vercel.app](https://the-wild-oasis-admin-transon.vercel.app) |
-| **Stack** | React 18, Vite, React Query, Styled Components, Supabase, Vercel |
+| **Stack** | React 18, Vite, React Query, Styled Components, Supabase, CASL, Vercel |
 | **Domain words** | [CONTEXT.md](CONTEXT.md) |
 | **Docs** | [docs/README.md](docs/README.md) |
 
 ## What this project is
 
-- **Demo Operators** create their own accounts (public Sign up on `/login`).
+- **Demo Operators** enter with **Try Demo** on `/login` (Edge Function `try-demo` mints a session for one shared demo Auth user).
+- **Owner** is a separate role (`app_metadata.role=owner`): hidden email/password gate on `/login` (not advertised). Used for Account updates and manual Demo Reset.
+- **CASL** gates privileged UI (Account, manual Demo Reset); Postgres RLS and write triggers remain authoritative.
 - Everyone shares the same **Hotel Data** (cabins, guests, bookings, settings).
-- A daily **Demo Reset** restores the **Seed**; Auth accounts are kept.
-- During a **Maintenance Window**, writes and normal login use are blocked.
-- A **Write Quota** limits mutating actions per Demo Operator.
+- A daily **Demo Reset** restores the **Seed**; Auth identities are kept.
+- During a **Maintenance Window**, writes and normal signed-in use are blocked.
+- A **Write Quota** limits mutating actions per Auth user (the shared demo user shares one quota bucket).
 
 This is **not** a multi-tenant real hotel system. Design decisions: [docs/adr/](docs/adr/).
 
@@ -49,9 +51,9 @@ Only variables prefixed with `VITE_` are available in the browser. Full notes: [
 |----------|----------|---------|
 | `VITE_SUPABASE_URL` | Yes | Supabase project URL |
 | `VITE_SUPABASE_ANON_KEY` | Yes | Public anon key (safe for browser; RLS still applies) |
-| `VITE_TURNSTILE_SITE_KEY` | No | Cloudflare Turnstile site key for public Sign up |
+| `VITE_TURNSTILE_SITE_KEY` | No | Optional Turnstile for Try Demo when Edge `TURNSTILE_SECRET_KEY` is set |
 
-**Do not** put `service_role` or `RESET_CRON_SECRET` in the frontend `.env`. Those belong in GitHub Actions / Supabase Edge Function secrets ([docs/configuration.md](docs/configuration.md)).
+**Do not** put `service_role`, `DEMO_USER_PASSWORD`, or `RESET_CRON_SECRET` in the frontend `.env`. Those belong in Supabase Edge Function secrets and GitHub Actions ([docs/configuration.md](docs/configuration.md)).
 
 ## Documentation map
 
@@ -59,22 +61,22 @@ Only variables prefixed with `VITE_` are available in the browser. Full notes: [
 |-----|----------|
 | [CONTEXT.md](CONTEXT.md) | Ubiquitous language (glossary) |
 | [docs/architecture.md](docs/architecture.md) | System diagram and components |
-| [docs/configuration.md](docs/configuration.md) | Env, secrets, Auth URLs, Turnstile |
+| [docs/configuration.md](docs/configuration.md) | Env, Edge secrets, Auth URLs, optional Turnstile |
 | [docs/operations.md](docs/operations.md) | Keep-alive, Demo Reset, quotas, troubleshooting |
 | [docs/deploy.md](docs/deploy.md) | Step-by-step Vercel + Supabase checklist |
 | [docs/adr/](docs/adr/) | Architecture Decision Records |
 
-## App routes (after Sign up)
+## App routes (after Try Demo or owner login)
 
 | Path | Screen |
 |------|--------|
-| `/login` | Log in / Sign up |
+| `/login` | Try Demo; hidden owner sign-in |
 | `/dashboard` | Overview |
 | `/bookings`, `/bookings/:id` | Bookings |
 | `/cabins` | Cabins |
-| `/settings` | Hotel settings + manual Demo Reset |
-| `/account` | Demo Operator profile |
+| `/settings` | Hotel settings; manual Demo Reset (owner only) |
+| `/account` | Demo Operator profile (owner only) |
 
 ## Deploy
 
-Production is intended on **Vercel** with **Supabase** Free and **GitHub Actions** for keep-alive + nightly Demo Reset. Follow [docs/deploy.md](docs/deploy.md).
+Production is intended on **Vercel** with **Supabase** Free and **GitHub Actions** for keep-alive + nightly Demo Reset. Follow [docs/deploy.md](docs/deploy.md) (deploy `try-demo`, set demo Edge secrets, create owner user).
