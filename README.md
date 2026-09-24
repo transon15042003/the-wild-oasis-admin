@@ -12,7 +12,7 @@ Vite + React admin console for a fictional boutique hotel, published as a **Demo
 ## What this project is
 
 - **Demo Operators** enter with **Try Demo** on `/login` (Edge Function `try-demo` mints a session for one shared demo Auth user).
-- **Owner** is a separate role (`app_metadata.role=owner`): hidden email/password gate on `/login` (not advertised). Used for Account updates and manual Demo Reset.
+- **Account login** stays on `/login` (email/password). **Owner** (`app_metadata.role=owner`) uses that form for Account updates and manual Demo Reset. Public Sign up is off.
 - **CASL** gates privileged UI (Account, manual Demo Reset); Postgres RLS and write triggers remain authoritative.
 - Everyone shares the same **Hotel Data** (cabins, guests, bookings, settings).
 - A daily **Demo Reset** restores the **Seed**; Auth identities are kept.
@@ -70,7 +70,7 @@ Only variables prefixed with `VITE_` are available in the browser. Full notes: [
 
 | Path | Screen |
 |------|--------|
-| `/login` | Try Demo; hidden owner sign-in |
+| `/login` | Try Demo + account email/password login |
 | `/dashboard` | Overview |
 | `/bookings`, `/bookings/:id` | Bookings |
 | `/cabins` | Cabins |

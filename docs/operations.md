@@ -50,7 +50,7 @@ Trong cửa sổ bảo trì:
 
 ## Smoke test định kỳ
 
-1. **Try Demo** trên production (và owner login qua form ẩn nếu cần).  
+1. **Try Demo** trên production (và login email/mật khẩu nếu cần).  
 2. Sửa một cabin (kiểm tra write bình thường).  
 3. (Tuỳ chọn) Manual reset → thấy Maintenance → sau vài phút dùng lại.  
 4. Actions → chạy Keep Alive và Nightly Reset → HTTP 200.  
@@ -63,7 +63,7 @@ Trong cửa sổ bảo trì:
 | `/login` 404 | `vercel.json` đã deploy chưa? |
 | Try Demo fail / 400 Turnstile | `TURNSTILE_SECRET_KEY` đang set trong khi client v1 gửi `{}`? → **unset** secret (xem [configuration.md](configuration.md)). |
 | Try Demo fail / thiếu session | Edge secrets `DEMO_USER_EMAIL` + `DEMO_USER_PASSWORD` đã set? Function `try-demo` đã deploy? |
-| Owner không vào được | User có `app_metadata.role` = `"owner"`? Email/mật khẩu đúng form ẩn trên `/login`? |
+| Owner không vào được | User có `app_metadata.role` = `"owner"`? Email/mật khẩu đúng trên form login `/login`? |
 | Write bị reject | Đang Maintenance? Hết quota 60/giờ? |
 | Nightly fail | `RESET_CRON_SECRET` trùng giữa GitHub và Supabase? |
 | Project pause | Keep-alive secrets + workflow có chạy? |
