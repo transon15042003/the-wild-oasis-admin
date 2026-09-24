@@ -44,7 +44,7 @@ supabase secrets set DEMO_USER_EMAIL=demo@example.com DEMO_USER_PASSWORD='your-s
 
 ### Owner (một lần)
 
-Tạo user owner trong Supabase Dashboard → Authentication → Users (email/mật khẩu riêng, **không** dùng chung với demo). Gán `app_metadata.role` = `"owner"` (SQL Editor hoặc Admin API `updateUserById`). Owner đăng nhập qua form ẩn trên `/login`; vào demo qua nút **Try Demo** → Edge `try-demo`.
+Tạo user owner trong Supabase Dashboard → Authentication → Users (email/mật khẩu riêng, **không** dùng chung với demo). Gán `app_metadata.role` = `"owner"` (SQL Editor hoặc Admin API `updateUserById`). Owner (và account khác) đăng nhập qua form email/mật khẩu trên `/login`; khách portfolio vào nhanh bằng **Try Demo** → Edge `try-demo`.
 
 ## GitHub Actions secrets
 

@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import LoginForm from "../features/authentication/LoginForm";
 import useTryDemo from "../features/authentication/useTryDemo";
 import Logo from "../ui/Logo";
@@ -38,25 +36,24 @@ const DemoButton = styled(Button)`
     justify-self: center;
 `;
 
+const Divider = styled.p`
+    text-align: center;
+    font-size: 1.4rem;
+    color: var(--color-grey-500);
+`;
+
 function Login() {
-    const [searchParams] = useSearchParams();
-    const [logoClicks, setLogoClicks] = useState(0);
     const { tryDemo, isPending } = useTryDemo();
-    const showOwner = searchParams.get("owner") === "1" || logoClicks >= 5;
 
     return (
         <LoginLayout>
-            <Logo
-                onClick={() =>
-                    setLogoClicks((clicks) => Math.min(clicks + 1, 5))
-                }
-            />
+            <Logo />
             <DemoStatusBanner />
             <Intro>
                 <Heading as="h4">Try the Demo Sandbox</Heading>
                 <Copy>
-                    Explore shared demo data in a temporary account. The
-                    sandbox resets nightly.
+                    Explore shared demo data with one click. The sandbox resets
+                    nightly.
                 </Copy>
                 <DemoButton
                     size="large"
@@ -67,7 +64,9 @@ function Login() {
                     {isPending ? <SpinnerMini /> : "Try Demo"}
                 </DemoButton>
             </Intro>
-            {showOwner && <LoginForm />}
+            <Divider>or log in with your account</Divider>
+            <Heading as="h4">Log in to your account</Heading>
+            <LoginForm />
         </LoginLayout>
     );
 }

@@ -13,8 +13,6 @@ export function AbilityProvider({ children }) {
     const ability = defineAbilityFor(user);
 
     return (
-        <CaslAbilityProvider ability={ability}>
-            {children}
-        </CaslAbilityProvider>
+        <CaslAbilityProvider value={ability}>{children}</CaslAbilityProvider>
     );
 }

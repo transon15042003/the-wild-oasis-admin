@@ -53,10 +53,10 @@ flowchart TB
 3. Function: user theo `DEMO_USER_EMAIL` / `DEMO_USER_PASSWORD` (Edge secrets); tạo nếu thiếu với `app_metadata.role=demo`.
 4. Trả tokens → `supabase.auth.setSession` → SPA bọc **AbilityProvider** (CASL).
 
-## Luồng Owner
+## Luồng đăng nhập account
 
-1. Cổng ẩn trên `/login` (logo ×5 hoặc `?owner=1`) → form email/mật khẩu.
-2. `signInWithPassword` với user có `app_metadata.role=owner` (tạo thủ công trong Dashboard, không dùng chung credential demo).
+1. Form email/mật khẩu trên `/login` (cùng trang với **Try Demo**; không Sign up công khai).
+2. `signInWithPassword`. User `app_metadata.role=owner` (tạo thủ công trong Dashboard) được CASL full; role khác / thiếu → abilities `demo`.
 
 ## Luồng Demo Reset
 
