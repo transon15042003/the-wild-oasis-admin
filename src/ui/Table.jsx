@@ -76,6 +76,8 @@ const Empty = styled.p`
 `;
 
 const Cell = styled.div`
+  min-width: 0;
+
   ${(props) =>
     props.$hideOnTablet &&
     css`
